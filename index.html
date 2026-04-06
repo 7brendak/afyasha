@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AfyaSHA Navigator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px}
+.phone{width:100%;max-width:420px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12);min-height:700px;display:flex;flex-direction:column}
+.screen{display:none;flex-direction:column;flex:1}
+.screen.active{display:flex}
+.topbar{background:#1a7a4a;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar-logo{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff}
+.topbar-title{font-size:16px;font-weight:600;color:#fff}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,0.8);margin-top:1px}
+.back-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:13px;padding:0 0 8px;display:flex;align-items:center;gap:4px}
+.nav{display:flex;border-bottom:1px solid #eee;background:#fff;flex-shrink:0}
+.nav-btn{flex:1;padding:10px 4px 9px;border:none;background:transparent;cursor:pointer;font-size:11px;color:#888;border-bottom:2px solid transparent}
+.nav-btn.active{color:#1a7a4a;border-bottom-color:#1a7a4a;font-weight:600}
+.content{flex:1;overflow-y:auto;padding:16px}
+.search-bar{display:flex;gap:8px;margin-bottom:12px}
+.search-input{flex:1;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:14px}
+.search-btn{padding:10px 16px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-chip{padding:5px 12px;border:1px solid #ddd;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#666}
+.filter-chip.active{background:#e8f5ee;border-color:#1a7a4a;color:#1a7a4a;font-weight:600}
+.hospital-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
+.hospital-card:hover{border-color:#1a7a4a}
+.hcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.hcard-name{font-size:14px;font-weight:600;color:#222}
+.hcard-type{font-size:11px;color:#888;margin-top:2px}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.badge-green{background:#e8f5ee;color:#1a7a4a}
+.badge-amber{background:#fff3e0;color:#e65100}
+.badge-red{background:#ffeaea;color:#c62828}
+.badge-blue{background:#e3f2fd;color:#1565c0}
+.hcard-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.hcard-note{font-size:12px;color:#666;line-height:1.5;padding:8px 10px;background:#f9f9f9;border-radius:8px;border-left:3px solid #1a7a4a}
+.detail-section{margin-bottom:16px}
+.detail-label{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.detail-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:#888}
+.detail-val{font-weight:600;color:#222}
+.ai-box{background:#f0f9f4;border:1px solid #b2ddc5;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.ai-label{font-size:11px;font-weight:600;color:#1a7a4a;margin-bottom:6px}
+.ai-text{font-size:13px;color:#333;line-height:1.6}
+.chat-wrap{display:flex;flex-direction:column;height:560px}
+.chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
+.msg-user{align-self:flex-end;background:#1a7a4a;color:#fff;border-bottom-right-radius:3px}
+.msg-ai{align-self:flex-start;background:#f1f1f1;color:#222;border-bottom-left-radius:3px}
+.msg-thinking{align-self:flex-start;background:#f1f1f1;color:#888;border-bottom-left-radius:3px;font-style:italic}
+.chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+.chat-input{flex:1;padding:9px 12px;border:1px solid #ddd;border-radius:10px;font-size:13px}
+.chat-send{padding:9px 14px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-weight:600}
+.contribute-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.contribute-title{font-size:14px;font-weight:600;color:#222;margin-bottom:6px}
+.contribute-sub{font-size:12px;color:#666;line-height:1.6;margin-bottom:12px}
+.btn-green{width:100%;padding:12px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.btn-outline{width:100%;padding:11px;background:transparent;color:#1a7a4a;border:2px solid #1a7a4a;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+.disclaimer{font-size:11px;color:#888;line-height:1.5;padding:10px;background:#f9f9f9;border-radius:8px;margin-top:8px}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{background:#f9f9f9;border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:20px;font-weight:700;color:#1a7a4a}
+.stat-lbl{font-size:10px;color:#888;margin-top:2px}
+.empty-state{text-align:center;padding:40px 20px;color:#888;font-size:13px}
+.services-wrap{display:flex;gap:6px;flex-wrap:wrap;padding:8px 0}
+</style>
+</head>
+<body>
+<div class="phone" id="app">
+
+<div id="home-screen" class="screen active">
+  <div class="topbar">
+    <div class="topbar-logo">A</div>
+    <div>
+      <div class="topbar-title">AfyaSHA Navigator</div>
+      <div class="topbar-sub">Know what to expect before you go</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn active" onclick="showTab('search-tab','home-screen',this)">Find hospital</button>
+    <button class="nav-btn" onclick="showTab('chat-tab','home-screen',this)">Ask AI</button>
+    <button class="nav-btn" onclick="showTab('contribute-tab','home-screen',this)">Contribute</button>
+  </div>
+  <div id="search-tab" class="content">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">10</div><div class="stat-lbl">Hospitals</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">SHA active</div></div>
+      <div class="stat"><div class="stat-num">23</div><div class="stat-lbl">HCP reports</div></div>
+    </div>
+    <div class="search-bar">
+      <input class="search-input" id="search-input" placeholder="Search hospital or area..." oninput="filterHospitals()"/>
+      <button class="search-btn" onclick="filterHospitals()">Search</button>
+    </div>
+    <div class="filter-row">
+      <div class="filter-chip active" onclick="setFilter('all',this)">All</div>
+      <div class="filter-chip" onclick="setFilter('sha',this)">SHA active</div>
+      <div class="filter-chip" onclick="setFilter('civil',this)">Civil servants</div>
+      <div class="filter-chip" onclick="setFilter('oncology',this)">Oncology</div>
+      <div class="filter-chip" onclick="setFilter('24hr',this)">24hr</div>
+    </div>
+    <div id="hospital-list"></div>
+  </div>
+  <div id="chat-tab" class="content" style="display:none;padding:0">
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg msg-ai">Hello! I am the AfyaSHA AI assistant. Ask me anything about SHA coverage at Nairobi hospitals. For example: "Which hospitals accept SHA for civil servants?" or "Do I need an OTP at Nairobi West Hospital?"</div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" placeholder="Ask about SHA coverage..." onkeydown="if(event.key==='Enter')sendChat()"/>
+        <button class="chat-send" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+  <div id="contribute-tab" class="content" style="display:none">
+    <div class="contribute-card">
+      <div class="contribute-title">Are you a healthcare professional?</div>
+      <div class="contribute-sub">AfyaSHA is powered by real insights from pharmacists, nurses, and clinicians. Your knowledge helps patients navigate SHA before they arrive — reducing failed visits and delays in care.</div>
+      <button class="btn-green" onclick="window.open('https://forms.gle/placeholder','_blank')">Fill in hospital data form</button>
+      <button class="btn-outline" onclick="window.open('https://forms.gle/placeholder','_blank')">Report outdated information</button>
+    </div>
+    <div class="contribute-card">
+      <div class="contribute-title">What we collect</div>
+      <div class="contribute-sub">
+        SHA acceptance status and type<br>
+        Civil servant coverage (full or partial)<br>
+        OTP and referral requirements<br>
+        Department-specific access rules<br>
+        Real-world workflow constraints<br>
+        Coverage caps and medication rules
+      </div>
+    </div>
+    <div class="disclaimer">Pilot data notice: AfyaSHA is in pilot phase. Information is compiled from healthcare professional reports and public sources. Always confirm with the facility before visiting. Last updated: April 2026.</div>
+  </div>
+</div>
+
+<div id="detail-screen" class="screen">
+  <div class="topbar">
+    <div style="flex:1">
+      <button class="back-btn" onclick="goBack()">&#8592; Back to results</button>
+      <div class="topbar-title" id="detail-name"></div>
+      <div class="topbar-sub" id="detail-type"></div>
+    </div>
+  </div>
+  <div class="content" id="detail-content"></div>
+</div>
+
+</div>
+<script>
+var hospitals=[
+  {id:1,name:"Kenyatta National Hospital",area:"Upper Hill",type:"National Referral",sha:true,civil:true,otp:true,referral:true,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Pharmacy"],note:"SHA active but civil servant onboarding varies by department. Oncology requires referral letter and OTP. Expect long queues.",aiInsight:"KNH accepts SHA broadly but civil servant coverage depends on which department you visit. Bring your SHA card, national ID, OTP code, and referral letter. Oncology patients must go through the oncology department specifically. Budget at least half a day for your first visit.",coverage:"Full",otp_note:"Required for most services",civil_note:"Partial — varies by department"},
+  {id:2,name:"Aga Khan University Hospital",area:"Parklands",type:"Private Referral",sha:false,civil:false,otp:false,referral:false,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Cardiology"],note:"Does not currently accept SHA. Private pay only. Excellent facilities but high out-of-pocket costs.",aiInsight:"Aga Khan Hospital does not accept SHA at this time. If you are relying on SHA coverage, you will need a different facility. For private patients, this is one of Nairobi's most well-equipped hospitals.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable"},
+  {id:3,name:"Nairobi West Hospital",area:"Nairobi West",type:"County Referral",sha:true,civil:true,otp:false,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Maternity","Pharmacy"],note:"SHA active and civil servant friendly. No OTP required for outpatient. One of the more straightforward SHA experiences reported by HCPs.",aiInsight:"Nairobi West is one of the more reliable SHA facilities for civil servants. No OTP required for outpatient visits — bring your SHA card and national ID. Staff are generally well-trained on SHA processing.",coverage:"Full",otp_note:"Not required for outpatient",civil_note:"Full civil servant coverage"},
+  {id:4,name:"MP Shah Hospital",area:"Parklands",type:"Private",sha:true,civil:false,otp:true,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Cardiology","Oncology"],note:"Accepts SHA but civil servant onboarding not yet complete as of early 2026. OTP required. Confirm before visiting if you are a civil servant.",aiInsight:"MP Shah accepts SHA for standard members but civil servant onboarding was incomplete as of early 2026. If you are a civil servant, call ahead to confirm. OTP is required — ensure you have your code before arriving.",coverage:"Partial",otp_note:"Required",civil_note:"Incomplete — call ahead"},
+  {id:5,name:"Mbagathi County Hospital",area:"Mbagathi",type:"County",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Inpatient","Outpatient","Maternity","Pharmacy"],note:"SHA active. Civil servants covered. No OTP for outpatient. Limited specialist services. Emergency services close at 10pm.",aiInsight:"Mbagathi is reliable for SHA and civil servants for general care. Note that emergency services are not available after 10pm. No OTP needed for outpatient. Limited specialist services — oncology and cardiology require referral elsewhere.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"},
+  {id:6,name:"Coptic Hospital",area:"Ngong Road",type:"Mission",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Inpatient","Outpatient","Maternity","Surgery","Pharmacy"],note:"SHA active and civil servant friendly. Known for good patient experience. No OTP required. Closes at 8pm.",aiInsight:"Coptic Hospital has a good reputation for SHA processing and civil servant coverage. No OTP required and staff are well-trained on SHA workflows. Not a 24-hour facility — do not visit after 8pm for emergencies.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"},
+  {id:7,name:"Athi River Level 4 Hospital",area:"Athi River",type:"County Level 4",sha:true,civil:false,otp:true,referral:true,h24:false,services:["Inpatient","Outpatient","Maternity"],note:"SHA active but outside Nairobi CBD. Civil servant onboarding not confirmed. OTP and referral required for inpatient.",aiInsight:"Athi River Level 4 is SHA-active for standard members but civil servant coverage has not been confirmed. OTP required for inpatient admission. Suitable for patients in the Athi River and Mlolongo areas.",coverage:"Standard SHA only",otp_note:"Required for inpatient",civil_note:"Not confirmed"},
+  {id:8,name:"Karen Hospital",area:"Karen",type:"Private",sha:false,civil:false,otp:false,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Oncology","Cardiology"],note:"Does not accept SHA. Private pay only. High-quality facilities for oncology and cardiology.",aiInsight:"Karen Hospital does not accept SHA. This is a private-pay facility. For private patients, Karen Hospital has strong oncology and cardiology departments and is open 24 hours.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable"},
+  {id:9,name:"Pumwani Maternity Hospital",area:"Eastlands",type:"County Specialist",sha:true,civil:true,otp:false,referral:false,h24:true,services:["Maternity","Newborn","Emergency Obstetric"],note:"SHA active specifically for maternity services. Civil servants covered. No OTP required. 24-hour maternity emergency services available.",aiInsight:"Pumwani is SHA-active for maternity and obstetric services. Civil servants are fully covered. No OTP required. 24-hour obstetric emergency services are available.",coverage:"Maternity services",otp_note:"Not required",civil_note:"Full for maternity"},
+  {id:10,name:"Mutuini Sub-County Hospital",area:"Dagoretti",type:"Sub-County",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Outpatient","Pharmacy","Maternal Health"],note:"SHA active. Civil servants covered. Basic services only. No OTP. Good for primary care and prescription collection.",aiInsight:"Mutuini is a good option for basic outpatient care and prescription collection under SHA. Civil servants are covered. No OTP required. For specialist care or emergencies, go to a higher-level facility.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"}
+];
+var activeFilter='all';
+var chatHistory=[];
+function showTab(tabId,screenId,btn){
+  var screen=document.getElementById(screenId);
+  screen.querySelectorAll('.content').forEach(function(c){c.style.display='none'});
+  var t=document.getElementById(tabId);
+  t.style.display='flex';
+  t.style.flexDirection='column';
+  screen.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+}
+function setFilter(f,el){
+  activeFilter=f;
+  document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+  filterHospitals();
+}
+function filterHospitals(){
+  var q=document.getElementById('search-input').value.toLowerCase();
+  var filtered=hospitals.filter(function(h){
+    var matchQ=!q||h.name.toLowerCase().includes(q)||h.area.toLowerCase().includes(q);
+    var matchF=activeFilter==='all'||(activeFilter==='sha'&&h.sha)||(activeFilter==='civil'&&h.civil)||(activeFilter==='oncology'&&h.services.includes('Oncology'))||(activeFilter==='24hr'&&h.h24);
+    return matchQ&&matchF;
+  });
+  renderList(filtered);
+}
+function renderList(list){
+  var el=document.getElementById('hospital-list');
+  if(list.length===0){el.innerHTML='<div class="empty-state">No hospitals match your search.</div>';return;}
+  el.innerHTML=list.map(function(h){
+    var sha=h.sha?'<span class="badge badge-green">SHA active</span>':'<span class="badge badge-red">No SHA</span>';
+    var civil=h.civil?'<span class="badge badge-blue">Civil servants</span>':'';
+    var otp=h.otp?'<span class="badge badge-amber">OTP required</span>':'';
+    var h24=h.h24?'<span class="badge badge-green">24hr</span>':'';
+    return '<div class="hospital-card" onclick="showDetail('+h.id+')"><div class="hcard-top"><div><div class="hcard-name">'+h.name+'</div><div class="hcard-type">'+h.type+' &middot; '+h.area+'</div></div>'+sha+'</div><div class="hcard-tags">'+civil+otp+h24+'</div><div class="hcard-note">'+h.note+'</div></div>';
+  }).join('');
+}
+function showDetail(id){
+  var h=hospitals.find(function(x){return x.id===id});
+  document.getElementById('detail-name').textContent=h.name;
+  document.getElementById('detail-type').textContent=h.type+' · '+h.area;
+  var shaCol=h.sha?'badge-green':'badge-red';
+  var shaLabel=h.sha?'SHA Active':'SHA Not Accepted';
+  var services=h.services.map(function(s){return'<span class="badge badge-green" style="margin:3px">'+s+'</span>'}).join('');
+  document.getElementById('detail-content').innerHTML=
+    '<div class="ai-box"><div class="ai-label">&#10024; AfyaSHA AI guidance</div><div class="ai-text">'+h.aiInsight+'</div></div>'+
+    '<div class="detail-section"><div class="detail-label">SHA coverage details</div><div class="detail-card">'+
+    '<div class="detail-row"><span class="detail-key">SHA status</span><span class="badge '+shaCol+'">'+shaLabel+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Coverage level</span><span class="detail-val">'+h.coverage+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Civil servants</span><span class="detail-val">'+h.civil_note+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">OTP requirement</span><span class="detail-val">'+h.otp_note+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">24-hour services</span><span class="detail-val">'+(h.h24?'Yes':'No — check hours')+'</span></div>'+
+    '</div></div>'+
+    '<div class="detail-section"><div class="detail-label">Available services</div><div class="detail-card"><div class="services-wrap">'+services+'</div></div></div>'+
+    '<div class="disclaimer">Information compiled from healthcare professional reports. Always confirm with the facility before visiting.</div>';
+  document.getElementById('home-screen').classList.remove('active');
+  document.getElementById('detail-screen').classList.add('active');
+}
+function goBack(){
+  document.getElementById('detail-screen').classList.remove('active');
+  document.getElementById('home-screen').classList.add('active');
+}
+async function sendChat(){
+  var input=document.getElementById('chat-input');
+  var msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  var msgs=document.getElementById('chat-messages');
+  msgs.innerHTML+='<div class="msg msg-user">'+msg+'</div>';
+  msgs.innerHTML+='<div class="msg msg-thinking" id="thinking">Thinking...</div>';
+  msgs.scrollTop=msgs.scrollHeight;
+  chatHistory.push({role:'user',content:msg});
+  var sys='You are the AfyaSHA AI Navigator assistant helping patients in Kenya understand SHA (Social Health Authority) insurance coverage at Nairobi hospitals. Hospital data: '+JSON.stringify(hospitals.map(function(h){return{name:h.name,area:h.area,sha:h.sha,civil:h.civil,otp:h.otp,h24:h.h24,services:h.services,coverage:h.coverage,civil_note:h.civil_note,otp_note:h.otp_note,note:h.note}}))+'. Be concise, practical, and plain. Always remind users to confirm with the facility before visiting.';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:sys,messages:chatHistory})});
+    var data=await res.json();
+    var reply=data.content&&data.content[0]?data.content[0].text:'Sorry, I could not get a response. Please try again.';
+    chatHistory.push({role:'assistant',content:reply});
+    document.getElementById('thinking').remove();
+    msgs.innerHTML+='<div class="msg msg-ai">'+reply+'</div>';
+  }catch(e){
+    document.getElementById('thinking').remove();
+    msgs.innerHTML+='<div class="msg msg-ai">Having trouble connecting. Please try again.</div>';
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+}
+renderList(hospitals);
+</script>
+</body>
+</html>
