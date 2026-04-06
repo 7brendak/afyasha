@@ -1,2 +1,2 @@
 # afyasha
-An app that tells you what to expect with SHA insuarance in Kenya ,the coverage, OTP and what to now before going to a certain hospital.Basically your quick guide to know which hospital around your place covers the needs you have.
+ AfyaSHA is an app that helps you understand what to expect when using SHA insurance in Kenya covering civil servant and normal coverage, OTP requirements, and hospital-specific processes, so you can choose the right facility for your needs before you go.
