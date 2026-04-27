@@ -6,74 +6,97 @@
 <title>AfyaSHA Navigator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px}
-.phone{width:100%;max-width:420px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12);min-height:700px;display:flex;flex-direction:column}
-.screen{display:none;flex-direction:column;flex:1}
-.screen.active{display:flex}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh}
+.app{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
 .topbar{background:#1a7a4a;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.topbar-logo{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff}
+.topbar-logo{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff}
 .topbar-title{font-size:16px;font-weight:600;color:#fff}
 .topbar-sub{font-size:11px;color:rgba(255,255,255,0.8);margin-top:1px}
-.back-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:13px;padding:0 0 8px;display:flex;align-items:center;gap:4px}
-.nav{display:flex;border-bottom:1px solid #eee;background:#fff;flex-shrink:0}
-.nav-btn{flex:1;padding:10px 4px 9px;border:none;background:transparent;cursor:pointer;font-size:11px;color:#888;border-bottom:2px solid transparent}
+.nav{display:flex;border-bottom:1px solid #eee;background:#fff;flex-shrink:0;overflow-x:auto}
+.nav-btn{flex:1;min-width:70px;padding:10px 4px 9px;border:none;background:transparent;cursor:pointer;font-size:11px;color:#888;border-bottom:2px solid transparent;white-space:nowrap}
 .nav-btn.active{color:#1a7a4a;border-bottom-color:#1a7a4a;font-weight:600}
 .content{flex:1;overflow-y:auto;padding:16px}
+.screen{display:none}.screen.active{display:block}
+
+/* Search */
 .search-bar{display:flex;gap:8px;margin-bottom:12px}
 .search-input{flex:1;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:14px}
-.search-btn{padding:10px 16px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+.search-btn{padding:10px 14px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
 .filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.filter-chip{padding:5px 12px;border:1px solid #ddd;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#666}
-.filter-chip.active{background:#e8f5ee;border-color:#1a7a4a;color:#1a7a4a;font-weight:600}
+.chip{padding:5px 12px;border:1px solid #ddd;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#666}
+.chip.active{background:#e8f5ee;border-color:#1a7a4a;color:#1a7a4a;font-weight:600}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stat{background:#f9f9f9;border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:20px;font-weight:700;color:#1a7a4a}
+.stat-lbl{font-size:10px;color:#888;margin-top:2px}
+
+/* Hospital cards */
 .hospital-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
 .hospital-card:hover{border-color:#1a7a4a}
 .hcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
 .hcard-name{font-size:14px;font-weight:600;color:#222}
 .hcard-type{font-size:11px;color:#888;margin-top:2px}
+.hcard-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.hcard-note{font-size:12px;color:#666;line-height:1.5;padding:8px 10px;background:#f9f9f9;border-radius:8px;border-left:3px solid #1a7a4a}
 .badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
 .badge-green{background:#e8f5ee;color:#1a7a4a}
 .badge-amber{background:#fff3e0;color:#e65100}
 .badge-red{background:#ffeaea;color:#c62828}
 .badge-blue{background:#e3f2fd;color:#1565c0}
-.hcard-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.hcard-note{font-size:12px;color:#666;line-height:1.5;padding:8px 10px;background:#f9f9f9;border-radius:8px;border-left:3px solid #1a7a4a}
-.detail-section{margin-bottom:16px}
-.detail-label{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
-.detail-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
-.detail-row:last-child{border-bottom:none}
-.detail-key{color:#888}
-.detail-val{font-weight:600;color:#222}
-.ai-box{background:#f0f9f4;border:1px solid #b2ddc5;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+
+/* Detail screen */
+.back-btn{background:none;border:none;color:#1a7a4a;cursor:pointer;font-size:13px;padding:0 0 12px;display:flex;align-items:center;gap:4px;font-weight:500}
+.detail-name{font-size:18px;font-weight:700;color:#222;margin-bottom:4px}
+.detail-type{font-size:13px;color:#888;margin-bottom:16px}
+.ai-box{background:#f0f9f4;border:1px solid #b2ddc5;border-radius:12px;padding:14px 16px;margin-bottom:14px}
 .ai-label{font-size:11px;font-weight:600;color:#1a7a4a;margin-bottom:6px}
 .ai-text{font-size:13px;color:#333;line-height:1.6}
-.chat-wrap{display:flex;flex-direction:column;height:560px}
+.section-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.section-card-title{font-size:13px;font-weight:600;color:#222;margin-bottom:10px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:#888}
+.detail-val{font-weight:600;color:#222;text-align:right;max-width:60%}
+.services-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.disclaimer{font-size:11px;color:#888;line-height:1.5;padding:10px;background:#f9f9f9;border-radius:8px;margin-top:8px}
+
+/* Coverage screen */
+.cov-section{margin-bottom:20px}
+.cov-title{font-size:14px;font-weight:700;color:#1a7a4a;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8f5ee}
+.cov-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.cov-card-title{font-size:13px;font-weight:600;color:#222;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.cov-card-body{font-size:12px;color:#555;line-height:1.7}
+.limit-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px}
+.limit-row:last-child{border-bottom:none}
+.limit-key{color:#666}
+.limit-val{font-weight:600;color:#1a7a4a}
+.limit-val.red{color:#c62828}
+.limit-val.amber{color:#e65100}
+.warning-box{background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#5d4037;line-height:1.6}
+.info-box{background:#e3f2fd;border:1px solid #90caf9;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#1565c0;line-height:1.6}
+
+/* Chat */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 120px)}
 .chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
 .msg{max-width:85%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5}
 .msg-user{align-self:flex-end;background:#1a7a4a;color:#fff;border-bottom-right-radius:3px}
 .msg-ai{align-self:flex-start;background:#f1f1f1;color:#222;border-bottom-left-radius:3px}
 .msg-thinking{align-self:flex-start;background:#f1f1f1;color:#888;border-bottom-left-radius:3px;font-style:italic}
-.chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+.chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid #eee;background:#fff}
 .chat-input{flex:1;padding:9px 12px;border:1px solid #ddd;border-radius:10px;font-size:13px}
 .chat-send{padding:9px 14px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;cursor:pointer;font-weight:600}
-.contribute-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:14px 16px;margin-bottom:12px}
+
+/* Contribute */
+.contribute-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px;margin-bottom:12px}
 .contribute-title{font-size:14px;font-weight:600;color:#222;margin-bottom:6px}
 .contribute-sub{font-size:12px;color:#666;line-height:1.6;margin-bottom:12px}
 .btn-green{width:100%;padding:12px;background:#1a7a4a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
 .btn-outline{width:100%;padding:11px;background:transparent;color:#1a7a4a;border:2px solid #1a7a4a;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
-.disclaimer{font-size:11px;color:#888;line-height:1.5;padding:10px;background:#f9f9f9;border-radius:8px;margin-top:8px}
-.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-.stat{background:#f9f9f9;border-radius:10px;padding:10px;text-align:center}
-.stat-num{font-size:20px;font-weight:700;color:#1a7a4a}
-.stat-lbl{font-size:10px;color:#888;margin-top:2px}
 .empty-state{text-align:center;padding:40px 20px;color:#888;font-size:13px}
-.services-wrap{display:flex;gap:6px;flex-wrap:wrap;padding:8px 0}
 </style>
 </head>
 <body>
-<div class="phone" id="app">
-
-<div id="home-screen" class="screen active">
+<div class="app">
   <div class="topbar">
     <div class="topbar-logo">A</div>
     <div>
@@ -82,33 +105,143 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
   <div class="nav">
-    <button class="nav-btn active" onclick="showTab('search-tab','home-screen',this)">Find hospital</button>
-    <button class="nav-btn" onclick="showTab('chat-tab','home-screen',this)">Ask AI</button>
-    <button class="nav-btn" onclick="showTab('contribute-tab','home-screen',this)">Contribute</button>
+    <button class="nav-btn active" onclick="showScreen('find',this)">Find Hospital</button>
+    <button class="nav-btn" onclick="showScreen('coverage',this)">Coverage Limits</button>
+    <button class="nav-btn" onclick="showScreen('chat',this)">Ask AI</button>
+    <button class="nav-btn" onclick="showScreen('contribute',this)">Contribute</button>
   </div>
-  <div id="search-tab" class="content">
+
+  <!-- FIND HOSPITAL -->
+  <div id="find" class="screen active content">
     <div class="stats-row">
       <div class="stat"><div class="stat-num">10</div><div class="stat-lbl">Hospitals</div></div>
-      <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">SHA active</div></div>
-      <div class="stat"><div class="stat-num">23</div><div class="stat-lbl">HCP reports</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">SHA Active</div></div>
+      <div class="stat"><div class="stat-num">23</div><div class="stat-lbl">HCP Reports</div></div>
     </div>
     <div class="search-bar">
       <input class="search-input" id="search-input" placeholder="Search hospital or area..." oninput="filterHospitals()"/>
       <button class="search-btn" onclick="filterHospitals()">Search</button>
     </div>
     <div class="filter-row">
-      <div class="filter-chip active" onclick="setFilter('all',this)">All</div>
-      <div class="filter-chip" onclick="setFilter('sha',this)">SHA active</div>
-      <div class="filter-chip" onclick="setFilter('civil',this)">Civil servants</div>
-      <div class="filter-chip" onclick="setFilter('oncology',this)">Oncology</div>
-      <div class="filter-chip" onclick="setFilter('24hr',this)">24hr</div>
+      <div class="chip active" onclick="setFilter('all',this)">All</div>
+      <div class="chip" onclick="setFilter('sha',this)">SHA Active</div>
+      <div class="chip" onclick="setFilter('civil',this)">Civil Servants</div>
+      <div class="chip" onclick="setFilter('oncology',this)">Oncology</div>
+      <div class="chip" onclick="setFilter('24hr',this)">24hr</div>
     </div>
     <div id="hospital-list"></div>
   </div>
-  <div id="chat-tab" class="content" style="display:none;padding:0">
+
+  <!-- HOSPITAL DETAIL -->
+  <div id="detail" class="screen content">
+    <button class="back-btn" onclick="showScreen('find',null)">&#8592; Back to results</button>
+    <div class="detail-name" id="d-name"></div>
+    <div class="detail-type" id="d-type"></div>
+    <div id="d-content"></div>
+  </div>
+
+  <!-- COVERAGE LIMITS -->
+  <div id="coverage" class="screen content">
+    <div class="warning-box">
+      ⚠️ SHA coverage limits change frequently. Always verify current limits at sha.go.ke or call your facility before visiting. Last updated: April 2026.
+    </div>
+
+    <div class="cov-section">
+      <div class="cov-title">📋 The Three SHA Funds</div>
+      <div class="cov-card">
+        <div class="cov-card-title">1. Primary Healthcare Fund (PHF)</div>
+        <div class="cov-card-body">
+          Government-funded. Available to all registered SHA members at no extra cost.
+          <div class="limit-row"><span class="limit-key">Facilities covered</span><span class="limit-val">Level 2–3 (clinics, health centres)</span></div>
+          <div class="limit-row"><span class="limit-key">Annual capitation</span><span class="limit-val">Ksh 900 per person/year</span></div>
+          <div class="limit-row"><span class="limit-key">Visits allowed</span><span class="limit-val">Unlimited within covered services</span></div>
+          <div class="limit-row"><span class="limit-key">Covers</span><span class="limit-val">Doctor visits, basic tests, chronic disease management</span></div>
+        </div>
+      </div>
+      <div class="cov-card">
+        <div class="cov-card-title">2. Social Health Insurance Fund (SHIF)</div>
+        <div class="cov-card-body">
+          Funded by 2.75% of gross salary (minimum Ksh 300/month).
+          <div class="limit-row"><span class="limit-key">Facilities covered</span><span class="limit-val">Level 4–6 hospitals</span></div>
+          <div class="limit-row"><span class="limit-key">Services</span><span class="limit-val">Inpatient, outpatient, surgical, radiology, dialysis, oncology</span></div>
+          <div class="limit-row"><span class="limit-key">Outpatient cap (Level 3–4)</span><span class="limit-val amber">Ksh 2,500 per visit</span></div>
+          <div class="limit-row"><span class="limit-key">Consultation fee (average)</span><span class="limit-val red">~Ksh 2,000 (nearly exhausts cap)</span></div>
+        </div>
+      </div>
+      <div class="cov-card">
+        <div class="cov-card-title">3. Emergency, Chronic & Critical Illness Fund (ECCIF)</div>
+        <div class="cov-card-body">
+          Activated only when SHIF benefits are fully depleted.
+          <div class="limit-row"><span class="limit-key">Covers</span><span class="limit-val">Emergencies, severe and chronic conditions</span></div>
+          <div class="limit-row"><span class="limit-key">Activation</span><span class="limit-val">After SHIF exhausted</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cov-section">
+      <div class="cov-title">🎗️ Oncology Coverage</div>
+      <div class="cov-card">
+        <div class="cov-card-body">
+          <div class="limit-row"><span class="limit-key">Diagnostic tests (annual)</span><span class="limit-val">Ksh 100,000</span></div>
+          <div class="limit-row"><span class="limit-key">Cancer treatment (annual)</span><span class="limit-val">Ksh 300,000</span></div>
+          <div class="limit-row"><span class="limit-key">Total oncology (annual)</span><span class="limit-val">Ksh 400,000</span></div>
+          <div class="limit-row"><span class="limit-key">Treatment abroad (max)</span><span class="limit-val">Ksh 500,000/year</span></div>
+          <div class="limit-row"><span class="limit-key">PET & PSMA scans</span><span class="limit-val">Fully covered</span></div>
+        </div>
+      </div>
+      <div class="info-box">ℹ️ SHA covers up to Ksh 300,000 for cancer treatment annually — vs NHIF which capped at 6 sessions only. This is a significant improvement for oncology patients.</div>
+    </div>
+
+    <div class="cov-section">
+      <div class="cov-title">🏛️ Civil Servant Coverage</div>
+      <div class="cov-card">
+        <div class="cov-card-body">
+          <div class="limit-row"><span class="limit-key">Inpatient cover (annual)</span><span class="limit-val">Ksh 2.5M–2.8M (by job group)</span></div>
+          <div class="limit-row"><span class="limit-key">Outpatient limit (annual)</span><span class="limit-val">Ksh 250,000–300,000</span></div>
+          <div class="limit-row"><span class="limit-key">Dental & optical</span><span class="limit-val">Up to Ksh 50,000/year</span></div>
+          <div class="limit-row"><span class="limit-key">Per-visit outpatient cap</span><span class="limit-val amber">Ksh 2,500</span></div>
+          <div class="limit-row"><span class="limit-key">Diagnosis-specific cap</span><span class="limit-val red">Yes — limits apply per condition</span></div>
+        </div>
+      </div>
+      <div class="warning-box">
+        ⚠️ Critical for civil servants: Even if your overall inpatient balance shows available funds, a specific condition may be capped (e.g. Ksh 600,000 per diagnosis). Once that ceiling is reached, you pay out of pocket — even with balance remaining. Always ask the hospital about diagnosis-specific limits before admission.
+      </div>
+    </div>
+
+    <div class="cov-section">
+      <div class="cov-title">🤱 Maternity Coverage</div>
+      <div class="cov-card">
+        <div class="cov-card-body">
+          <div class="limit-row"><span class="limit-key">Normal delivery</span><span class="limit-val">Covered under SHIF</span></div>
+          <div class="limit-row"><span class="limit-key">C-section</span><span class="limit-val">Covered under SHIF</span></div>
+          <div class="limit-row"><span class="limit-key">Antenatal care</span><span class="limit-val">Covered at level 2–4</span></div>
+          <div class="limit-row"><span class="limit-key">Linda Mama</span><span class="limit-val red">No longer active (2025)</span></div>
+        </div>
+      </div>
+      <div class="warning-box">⚠️ Linda Mama ended in 2025. Maternity costs are now covered under standard SHA/SHIF rates. Costs vary by hospital — confirm delivery fees before choosing your facility.</div>
+    </div>
+
+    <div class="cov-section">
+      <div class="cov-title">💊 What SHA Does NOT Cover</div>
+      <div class="cov-card">
+        <div class="cov-card-body">
+          <div class="limit-row"><span class="limit-key">Outpatient drugs (some hospitals)</span><span class="limit-val red">Not covered at all facilities</span></div>
+          <div class="limit-row"><span class="limit-key">Pre-authorisation buffer</span><span class="limit-val red">Removed under SHA</span></div>
+          <div class="limit-row"><span class="limit-key">Costs above diagnosis cap</span><span class="limit-val red">Out of pocket</span></div>
+          <div class="limit-row"><span class="limit-key">Private room upgrades</span><span class="limit-val red">Not covered</span></div>
+          <div class="limit-row"><span class="limit-key">Non-contracted hospitals</span><span class="limit-val red">Not covered</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer">Sources: KUTRRH, Ministry of Health Tariff Schedule, Daily Nation, SHA.go.ke. Coverage limits are subject to change without notice. Always verify directly with your facility and SHA before seeking care.</div>
+  </div>
+
+  <!-- ASK AI -->
+  <div id="chat" class="screen">
     <div class="chat-wrap">
       <div class="chat-messages" id="chat-messages">
-        <div class="msg msg-ai">Hello! I am the AfyaSHA AI assistant. Ask me anything about SHA coverage at Nairobi hospitals. For example: "Which hospitals accept SHA for civil servants?" or "Do I need an OTP at Nairobi West Hospital?"</div>
+        <div class="msg msg-ai">Hello! I am the AfyaSHA AI assistant. Ask me anything about SHA coverage limits, hospital navigation, or what to expect before you visit. For example: "How much does SHA cover for cancer?" or "What should a civil servant know before going to hospital?"</div>
       </div>
       <div class="chat-input-row">
         <input class="chat-input" id="chat-input" placeholder="Ask about SHA coverage..." onkeydown="if(event.key==='Enter')sendChat()"/>
@@ -116,10 +249,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
   </div>
-  <div id="contribute-tab" class="content" style="display:none">
+
+  <!-- CONTRIBUTE -->
+  <div id="contribute" class="screen content">
     <div class="contribute-card">
       <div class="contribute-title">Are you a healthcare professional?</div>
-      <div class="contribute-sub">AfyaSHA is powered by real insights from pharmacists, nurses, and clinicians. Your knowledge helps patients navigate SHA before they arrive — reducing failed visits and delays in care.</div>
+      <div class="contribute-sub">AfyaSHA is powered by real insights from pharmacists, nurses, and clinicians. Your knowledge helps patients navigate SHA before they arrive — reducing failed visits, delays, and out-of-pocket costs.</div>
       <button class="btn-green" onclick="window.open('https://forms.gle/placeholder','_blank')">Fill in hospital data form</button>
       <button class="btn-outline" onclick="window.open('https://forms.gle/placeholder','_blank')">Report outdated information</button>
     </div>
@@ -130,125 +265,143 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         Civil servant coverage (full or partial)<br>
         OTP and referral requirements<br>
         Department-specific access rules<br>
-        Real-world workflow constraints<br>
-        Coverage caps and medication rules
+        Diagnosis-specific coverage caps<br>
+        Drug dispensing rules under SHA<br>
+        Real-world workflow constraints
       </div>
     </div>
     <div class="disclaimer">Pilot data notice: AfyaSHA is in pilot phase. Information is compiled from healthcare professional reports and public sources. Always confirm with the facility before visiting. Last updated: April 2026.</div>
   </div>
 </div>
 
-<div id="detail-screen" class="screen">
-  <div class="topbar">
-    <div style="flex:1">
-      <button class="back-btn" onclick="goBack()">&#8592; Back to results</button>
-      <div class="topbar-title" id="detail-name"></div>
-      <div class="topbar-sub" id="detail-type"></div>
-    </div>
-  </div>
-  <div class="content" id="detail-content"></div>
-</div>
-
-</div>
 <script>
 var hospitals=[
-  {id:1,name:"Kenyatta National Hospital",area:"Upper Hill",type:"National Referral",sha:true,civil:true,otp:true,referral:true,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Pharmacy"],note:"SHA active but civil servant onboarding varies by department. Oncology requires referral letter and OTP. Expect long queues.",aiInsight:"KNH accepts SHA broadly but civil servant coverage depends on which department you visit. Bring your SHA card, national ID, OTP code, and referral letter. Oncology patients must go through the oncology department specifically. Budget at least half a day for your first visit.",coverage:"Full",otp_note:"Required for most services",civil_note:"Partial — varies by department"},
-  {id:2,name:"Aga Khan University Hospital",area:"Parklands",type:"Private Referral",sha:false,civil:false,otp:false,referral:false,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Cardiology"],note:"Does not currently accept SHA. Private pay only. Excellent facilities but high out-of-pocket costs.",aiInsight:"Aga Khan Hospital does not accept SHA at this time. If you are relying on SHA coverage, you will need a different facility. For private patients, this is one of Nairobi's most well-equipped hospitals.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable"},
-  {id:3,name:"Nairobi West Hospital",area:"Nairobi West",type:"County Referral",sha:true,civil:true,otp:false,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Maternity","Pharmacy"],note:"SHA active and civil servant friendly. No OTP required for outpatient. One of the more straightforward SHA experiences reported by HCPs.",aiInsight:"Nairobi West is one of the more reliable SHA facilities for civil servants. No OTP required for outpatient visits — bring your SHA card and national ID. Staff are generally well-trained on SHA processing.",coverage:"Full",otp_note:"Not required for outpatient",civil_note:"Full civil servant coverage"},
-  {id:4,name:"MP Shah Hospital",area:"Parklands",type:"Private",sha:true,civil:false,otp:true,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Cardiology","Oncology"],note:"Accepts SHA but civil servant onboarding not yet complete as of early 2026. OTP required. Confirm before visiting if you are a civil servant.",aiInsight:"MP Shah accepts SHA for standard members but civil servant onboarding was incomplete as of early 2026. If you are a civil servant, call ahead to confirm. OTP is required — ensure you have your code before arriving.",coverage:"Partial",otp_note:"Required",civil_note:"Incomplete — call ahead"},
-  {id:5,name:"Mbagathi County Hospital",area:"Mbagathi",type:"County",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Inpatient","Outpatient","Maternity","Pharmacy"],note:"SHA active. Civil servants covered. No OTP for outpatient. Limited specialist services. Emergency services close at 10pm.",aiInsight:"Mbagathi is reliable for SHA and civil servants for general care. Note that emergency services are not available after 10pm. No OTP needed for outpatient. Limited specialist services — oncology and cardiology require referral elsewhere.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"},
-  {id:6,name:"Coptic Hospital",area:"Ngong Road",type:"Mission",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Inpatient","Outpatient","Maternity","Surgery","Pharmacy"],note:"SHA active and civil servant friendly. Known for good patient experience. No OTP required. Closes at 8pm.",aiInsight:"Coptic Hospital has a good reputation for SHA processing and civil servant coverage. No OTP required and staff are well-trained on SHA workflows. Not a 24-hour facility — do not visit after 8pm for emergencies.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"},
-  {id:7,name:"Athi River Level 4 Hospital",area:"Athi River",type:"County Level 4",sha:true,civil:false,otp:true,referral:true,h24:false,services:["Inpatient","Outpatient","Maternity"],note:"SHA active but outside Nairobi CBD. Civil servant onboarding not confirmed. OTP and referral required for inpatient.",aiInsight:"Athi River Level 4 is SHA-active for standard members but civil servant coverage has not been confirmed. OTP required for inpatient admission. Suitable for patients in the Athi River and Mlolongo areas.",coverage:"Standard SHA only",otp_note:"Required for inpatient",civil_note:"Not confirmed"},
-  {id:8,name:"Karen Hospital",area:"Karen",type:"Private",sha:false,civil:false,otp:false,referral:false,h24:true,services:["Inpatient","Outpatient","Emergency","Oncology","Cardiology"],note:"Does not accept SHA. Private pay only. High-quality facilities for oncology and cardiology.",aiInsight:"Karen Hospital does not accept SHA. This is a private-pay facility. For private patients, Karen Hospital has strong oncology and cardiology departments and is open 24 hours.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable"},
-  {id:9,name:"Pumwani Maternity Hospital",area:"Eastlands",type:"County Specialist",sha:true,civil:true,otp:false,referral:false,h24:true,services:["Maternity","Newborn","Emergency Obstetric"],note:"SHA active specifically for maternity services. Civil servants covered. No OTP required. 24-hour maternity emergency services available.",aiInsight:"Pumwani is SHA-active for maternity and obstetric services. Civil servants are fully covered. No OTP required. 24-hour obstetric emergency services are available.",coverage:"Maternity services",otp_note:"Not required",civil_note:"Full for maternity"},
-  {id:10,name:"Mutuini Sub-County Hospital",area:"Dagoretti",type:"Sub-County",sha:true,civil:true,otp:false,referral:false,h24:false,services:["Outpatient","Pharmacy","Maternal Health"],note:"SHA active. Civil servants covered. Basic services only. No OTP. Good for primary care and prescription collection.",aiInsight:"Mutuini is a good option for basic outpatient care and prescription collection under SHA. Civil servants are covered. No OTP required. For specialist care or emergencies, go to a higher-level facility.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage"}
+  {id:1,name:"Kenyatta National Hospital",area:"Upper Hill",type:"National Referral",sha:true,civil:true,otp:true,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Pharmacy"],note:"SHA active but civil servant onboarding varies by department. Oncology requires referral and OTP. Expect long queues. Confirm department-specific SHA status on arrival.",aiInsight:"KNH accepts SHA broadly but civil servant coverage depends on which department you visit. Bring your SHA card, national ID, OTP code, and referral letter. Oncology must go through the oncology department — general outpatient will redirect you. Budget half a day for your first visit.",coverage:"Full",otp_note:"Required for most services",civil_note:"Partial — varies by department",oncology_limit:"Ksh 400,000/year (Ksh 100K diagnostic + Ksh 300K treatment)"},
+  {id:2,name:"Aga Khan University Hospital",area:"Parklands",type:"Private Referral",sha:false,civil:false,otp:false,h24:true,services:["Oncology","Inpatient","Outpatient","Emergency","Cardiology"],note:"Does not accept SHA. Private pay only.",aiInsight:"Aga Khan Hospital does not accept SHA. You will pay fully out of pocket. For SHA patients, you need a different facility.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable",oncology_limit:"Private pay only"},
+  {id:3,name:"Nairobi West Hospital",area:"Nairobi West",type:"County Referral",sha:true,civil:true,otp:false,h24:true,services:["Inpatient","Outpatient","Emergency","Maternity","Pharmacy"],note:"SHA active and civil servant friendly. No OTP for outpatient. One of the more straightforward SHA experiences.",aiInsight:"Nairobi West is one of the more reliable SHA facilities for civil servants. No OTP required for outpatient — bring SHA card and national ID. Inpatient may need pre-authorisation. Staff are well-trained on SHA.",coverage:"Full",otp_note:"Not required for outpatient",civil_note:"Full civil servant coverage",oncology_limit:"Limited — refer to KNH for oncology"},
+  {id:4,name:"MP Shah Hospital",area:"Parklands",type:"Private",sha:true,civil:false,otp:true,h24:true,services:["Inpatient","Outpatient","Emergency","Cardiology","Oncology"],note:"Accepts SHA but civil servant onboarding incomplete as of early 2026. OTP required. Call ahead if civil servant.",aiInsight:"MP Shah accepts SHA for standard members but civil servant onboarding was incomplete as of early 2026. OTP required — have your code ready. Oncology available but needs specialist referral.",coverage:"Partial",otp_note:"Required",civil_note:"Incomplete — call ahead",oncology_limit:"Available — confirm current SHA coverage"},
+  {id:5,name:"Mbagathi County Hospital",area:"Mbagathi",type:"County",sha:true,civil:true,otp:false,h24:false,services:["Inpatient","Outpatient","Maternity","Pharmacy"],note:"SHA active. Civil servants covered. No OTP. Emergency closes at 10pm.",aiInsight:"Reliable for SHA and civil servants for general care. Emergency not available after 10pm. No OTP needed. Limited specialist services.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage",oncology_limit:"Not available — refer elsewhere"},
+  {id:6,name:"Coptic Hospital",area:"Ngong Road",type:"Mission",sha:true,civil:true,otp:false,h24:false,services:["Inpatient","Outpatient","Maternity","Surgery","Pharmacy"],note:"SHA active, civil servant friendly, no OTP. Closes at 8pm.",aiInsight:"Good reputation for SHA processing. No OTP, staff well-trained. Not 24-hour — avoid after 8pm for emergencies.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage",oncology_limit:"Not available — refer to KNH"},
+  {id:7,name:"Athi River Level 4",area:"Athi River",type:"County Level 4",sha:true,civil:false,otp:true,h24:false,services:["Inpatient","Outpatient","Maternity"],note:"SHA active for standard members. Civil servant coverage not confirmed. OTP required for inpatient.",aiInsight:"SHA active for standard members. Civil servant status unconfirmed — call ahead. OTP required for inpatient.",coverage:"Standard SHA only",otp_note:"Required for inpatient",civil_note:"Not confirmed",oncology_limit:"Not available"},
+  {id:8,name:"Karen Hospital",area:"Karen",type:"Private",sha:false,civil:false,otp:false,h24:true,services:["Inpatient","Outpatient","Emergency","Oncology","Cardiology"],note:"Does not accept SHA. Private pay only.",aiInsight:"Karen Hospital does not accept SHA. Private pay facility.",coverage:"None",otp_note:"Not applicable",civil_note:"Not applicable",oncology_limit:"Private pay only"},
+  {id:9,name:"Pumwani Maternity Hospital",area:"Eastlands",type:"County Specialist",sha:true,civil:true,otp:false,h24:true,services:["Maternity","Newborn","Emergency Obstetric"],note:"SHA active for maternity. Civil servants covered. No OTP. 24-hour obstetric emergency.",aiInsight:"Reliable for maternity under SHA. Civil servants fully covered. No OTP. Note: Linda Mama ended 2025 — costs now under standard SHIF rates.",coverage:"Maternity services",otp_note:"Not required",civil_note:"Full for maternity",oncology_limit:"Not applicable"},
+  {id:10,name:"Mutuini Sub-County Hospital",area:"Dagoretti",type:"Sub-County",sha:true,civil:true,otp:false,h24:false,services:["Outpatient","Pharmacy","Maternal Health"],note:"SHA active. Civil servants covered. Basic services only. Good for primary care.",aiInsight:"Good for basic outpatient and prescriptions under SHA. Civil servants covered. No OTP. For specialist care, go to a higher-level facility.",coverage:"Full",otp_note:"Not required",civil_note:"Full civil servant coverage",oncology_limit:"Not available"}
 ];
+
 var activeFilter='all';
 var chatHistory=[];
-function showTab(tabId,screenId,btn){
-  var screen=document.getElementById(screenId);
-  screen.querySelectorAll('.content').forEach(function(c){c.style.display='none'});
-  var t=document.getElementById(tabId);
-  t.style.display='flex';
-  t.style.flexDirection='column';
-  screen.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
-  btn.classList.add('active');
+
+function showScreen(id, btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else {
+    const idx = {find:0,coverage:1,chat:2,contribute:3}[id];
+    if(idx!==undefined) document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  }
 }
+
 function setFilter(f,el){
   activeFilter=f;
-  document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active')});
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   filterHospitals();
 }
+
 function filterHospitals(){
   var q=document.getElementById('search-input').value.toLowerCase();
-  var filtered=hospitals.filter(function(h){
-    var matchQ=!q||h.name.toLowerCase().includes(q)||h.area.toLowerCase().includes(q);
-    var matchF=activeFilter==='all'||(activeFilter==='sha'&&h.sha)||(activeFilter==='civil'&&h.civil)||(activeFilter==='oncology'&&h.services.includes('Oncology'))||(activeFilter==='24hr'&&h.h24);
-    return matchQ&&matchF;
+  var filtered=hospitals.filter(h=>{
+    var mQ=!q||h.name.toLowerCase().includes(q)||h.area.toLowerCase().includes(q);
+    var mF=activeFilter==='all'||(activeFilter==='sha'&&h.sha)||(activeFilter==='civil'&&h.civil)||(activeFilter==='oncology'&&h.services.includes('Oncology'))||(activeFilter==='24hr'&&h.h24);
+    return mQ&&mF;
   });
   renderList(filtered);
 }
+
 function renderList(list){
   var el=document.getElementById('hospital-list');
-  if(list.length===0){el.innerHTML='<div class="empty-state">No hospitals match your search.</div>';return;}
-  el.innerHTML=list.map(function(h){
-    var sha=h.sha?'<span class="badge badge-green">SHA active</span>':'<span class="badge badge-red">No SHA</span>';
-    var civil=h.civil?'<span class="badge badge-blue">Civil servants</span>':'';
-    var otp=h.otp?'<span class="badge badge-amber">OTP required</span>':'';
+  if(!list.length){el.innerHTML='<div class="empty-state">No hospitals match your search.</div>';return;}
+  el.innerHTML=list.map(h=>{
+    var sha=h.sha?'<span class="badge badge-green">SHA Active</span>':'<span class="badge badge-red">No SHA</span>';
+    var civil=h.civil?'<span class="badge badge-blue">Civil Servants</span>':'';
+    var otp=h.otp?'<span class="badge badge-amber">OTP Required</span>':'';
     var h24=h.h24?'<span class="badge badge-green">24hr</span>':'';
-    return '<div class="hospital-card" onclick="showDetail('+h.id+')"><div class="hcard-top"><div><div class="hcard-name">'+h.name+'</div><div class="hcard-type">'+h.type+' &middot; '+h.area+'</div></div>'+sha+'</div><div class="hcard-tags">'+civil+otp+h24+'</div><div class="hcard-note">'+h.note+'</div></div>';
+    return `<div class="hospital-card" onclick="showDetail(${h.id})">
+      <div class="hcard-top"><div><div class="hcard-name">${h.name}</div><div class="hcard-type">${h.type} &middot; ${h.area}</div></div>${sha}</div>
+      <div class="hcard-tags">${civil}${otp}${h24}</div>
+      <div class="hcard-note">${h.note}</div>
+    </div>`;
   }).join('');
 }
+
 function showDetail(id){
-  var h=hospitals.find(function(x){return x.id===id});
-  document.getElementById('detail-name').textContent=h.name;
-  document.getElementById('detail-type').textContent=h.type+' · '+h.area;
-  var shaCol=h.sha?'badge-green':'badge-red';
-  var shaLabel=h.sha?'SHA Active':'SHA Not Accepted';
-  var services=h.services.map(function(s){return'<span class="badge badge-green" style="margin:3px">'+s+'</span>'}).join('');
-  document.getElementById('detail-content').innerHTML=
-    '<div class="ai-box"><div class="ai-label">&#10024; AfyaSHA AI guidance</div><div class="ai-text">'+h.aiInsight+'</div></div>'+
-    '<div class="detail-section"><div class="detail-label">SHA coverage details</div><div class="detail-card">'+
-    '<div class="detail-row"><span class="detail-key">SHA status</span><span class="badge '+shaCol+'">'+shaLabel+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">Coverage level</span><span class="detail-val">'+h.coverage+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">Civil servants</span><span class="detail-val">'+h.civil_note+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">OTP requirement</span><span class="detail-val">'+h.otp_note+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">24-hour services</span><span class="detail-val">'+(h.h24?'Yes':'No — check hours')+'</span></div>'+
-    '</div></div>'+
-    '<div class="detail-section"><div class="detail-label">Available services</div><div class="detail-card"><div class="services-wrap">'+services+'</div></div></div>'+
-    '<div class="disclaimer">Information compiled from healthcare professional reports. Always confirm with the facility before visiting.</div>';
-  document.getElementById('home-screen').classList.remove('active');
-  document.getElementById('detail-screen').classList.add('active');
+  var h=hospitals.find(x=>x.id===id);
+  document.getElementById('d-name').textContent=h.name;
+  document.getElementById('d-type').textContent=h.type+' · '+h.area;
+  var sha=h.sha?'<span class="badge badge-green">SHA Active</span>':'<span class="badge badge-red">SHA Not Accepted</span>';
+  var services=h.services.map(s=>`<span class="badge badge-green" style="margin:3px">${s}</span>`).join('');
+  document.getElementById('d-content').innerHTML=`
+    <div class="ai-box"><div class="ai-label">✨ AfyaSHA AI Guidance</div><div class="ai-text">${h.aiInsight}</div></div>
+    <div class="section-card">
+      <div class="section-card-title">SHA Coverage Details</div>
+      <div class="detail-row"><span class="detail-key">SHA Status</span>${sha}</div>
+      <div class="detail-row"><span class="detail-key">Coverage Level</span><span class="detail-val">${h.coverage}</span></div>
+      <div class="detail-row"><span class="detail-key">Civil Servants</span><span class="detail-val">${h.civil_note}</span></div>
+      <div class="detail-row"><span class="detail-key">OTP Requirement</span><span class="detail-val">${h.otp_note}</span></div>
+      <div class="detail-row"><span class="detail-key">24-Hour Services</span><span class="detail-val">${h.h24?'Yes':'No — check hours'}</span></div>
+      <div class="detail-row"><span class="detail-key">Oncology Limit</span><span class="detail-val">${h.oncology_limit}</span></div>
+    </div>
+    <div class="section-card">
+      <div class="section-card-title">Available Services</div>
+      <div class="services-wrap">${services}</div>
+    </div>
+    <div class="disclaimer">Information from healthcare professional reports. Always confirm with facility before visiting.</div>`;
+  showScreen('detail',null);
 }
-function goBack(){
-  document.getElementById('detail-screen').classList.remove('active');
-  document.getElementById('home-screen').classList.add('active');
-}
+
 async function sendChat(){
   var input=document.getElementById('chat-input');
   var msg=input.value.trim();
   if(!msg)return;
   input.value='';
   var msgs=document.getElementById('chat-messages');
-  msgs.innerHTML+='<div class="msg msg-user">'+msg+'</div>';
-  msgs.innerHTML+='<div class="msg msg-thinking" id="thinking">Thinking...</div>';
+  msgs.innerHTML+=`<div class="msg msg-user">${msg}</div>`;
+  msgs.innerHTML+=`<div class="msg msg-thinking" id="thinking">Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
   chatHistory.push({role:'user',content:msg});
-  var sys='You are the AfyaSHA AI Navigator assistant helping patients in Kenya understand SHA (Social Health Authority) insurance coverage at Nairobi hospitals. Hospital data: '+JSON.stringify(hospitals.map(function(h){return{name:h.name,area:h.area,sha:h.sha,civil:h.civil,otp:h.otp,h24:h.h24,services:h.services,coverage:h.coverage,civil_note:h.civil_note,otp_note:h.otp_note,note:h.note}}))+'. Be concise, practical, and plain. Always remind users to confirm with the facility before visiting.';
+  var sys=`You are the AfyaSHA AI Navigator assistant helping patients in Kenya understand SHA (Social Health Authority) insurance coverage. You have access to hospital data and SHA coverage limits.
+
+COVERAGE LIMITS:
+- Primary Healthcare Fund (PHF): Ksh 900/year capitation, unlimited visits, Level 2-3 facilities
+- SHIF: 2.75% of gross salary, minimum Ksh 300/month, covers Level 4-6
+- Outpatient cap: Ksh 2,500 per visit at Level 3-4 (consultation alone costs ~Ksh 2,000)
+- Oncology: Ksh 100,000 diagnostic + Ksh 300,000 treatment = Ksh 400,000/year total; PET scans fully covered
+- Treatment abroad: Max Ksh 500,000/year
+- Civil servants inpatient: Ksh 2.5M-2.8M/year by job group; IMPORTANT: diagnosis-specific caps apply (e.g. Ksh 600,000 per condition)
+- Civil servants outpatient: Ksh 250,000-300,000/year
+- Dental & optical (civil servants): Up to Ksh 50,000/year
+- Linda Mama: ENDED in 2025 — maternity now under standard SHIF rates
+- Emergency, Chronic & Critical Illness Fund: activated only after SHIF depleted
+- SHA does NOT cover: outpatient drugs at all facilities, costs above diagnosis caps, private room upgrades, non-contracted hospitals
+
+HOSPITAL DATA: ${JSON.stringify(hospitals.map(h=>({name:h.name,area:h.area,sha:h.sha,civil:h.civil,otp:h.otp,h24:h.h24,coverage:h.coverage,civil_note:h.civil_note,note:h.note})))}
+
+Be concise, practical, plain English. Always remind users to confirm with facility before visiting. Flag civil servant diagnosis-specific caps when relevant.`;
   try{
     var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:sys,messages:chatHistory})});
     var data=await res.json();
     var reply=data.content&&data.content[0]?data.content[0].text:'Sorry, I could not get a response. Please try again.';
     chatHistory.push({role:'assistant',content:reply});
     document.getElementById('thinking').remove();
-    msgs.innerHTML+='<div class="msg msg-ai">'+reply+'</div>';
+    msgs.innerHTML+=`<div class="msg msg-ai">${reply}</div>`;
   }catch(e){
     document.getElementById('thinking').remove();
-    msgs.innerHTML+='<div class="msg msg-ai">Having trouble connecting. Please try again.</div>';
+    msgs.innerHTML+=`<div class="msg msg-ai">Having trouble connecting. Please try again.</div>`;
   }
   msgs.scrollTop=msgs.scrollHeight;
 }
+
 renderList(hospitals);
 </script>
 </body>
