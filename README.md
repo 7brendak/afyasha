@@ -63,8 +63,8 @@ Current Status
 
 Why This Matters Beyond Kenya
 SHA Navigator is a proof of concept for a broader class of problem: health system navigation in low-resource settings where official information is delayed, incomplete, or inaccessible to patients.
-The same information asymmetry that stranded my friend outside a Nairobi hospital exists across health systems throughout sub-Saharan Africa. The administrative complexity of insurance transitions, the gap between official policy and ground-level implementation, the reliance on word-of-mouth for life-critical decisions — these are not uniquely Kenyan problems.
-A pharmacist with clinical credibility, technical capability, and lived experience of these systems is well-positioned to build solutions that actually work in the settings they're designed for. That is what this project represents.
+The same information asymmetry that stranded my friend outside a Nairobi hospital exists across health systems throughout sub-Saharan Africa. The administrative complexity of insurance transitions, the gap between official policy and ground-level implementation, the reliance on word-of-mouth for life-critical decisions : these are not uniquely Kenyan problems.
+A pharmacist with clinical credibility, technical capability and lived experience of these systems is well-positioned to build solutions that actually work in the settings they're designed for. That is what this project represents.
 
 Built By
 Brenda Koech — BPharm, USIU-Africa | Pharmacovigilance Associate
