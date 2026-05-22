@@ -47,7 +47,7 @@ Plain-language outputs that don't require health literacy to interpret
 What I Learnt
 Building AfyaSHA Navigator taught me something I now hold as a core design principle:
 In low-resource health systems, the most critical data isn't stored in an official SQL database. It is latent in the minds of frontline staff.
-The nurse who knows that the SHA system goes down every Friday afternoon. The pharmacist who knows which OTP workaround the hospital is using this week. The receptionist who knows which civil servant categories are currently being processed. That knowledge exists — it just isn't captured anywhere a patient can access it before they arrive in pain at a door that can't help them.
+The nurse who knows that the SHA system goes down every Friday afternoon. The pharmacist who knows which OTP workaround the hospital is using this week. The receptionist who knows which civil servant categories are currently being processed. That knowledge exists  it just isn't captured anywhere a patient can access it before they arrive in pain at a door that can't help them.
 AfyaSHA Navigator is an attempt to systematically capture that informal intelligence and make it actionable.
 
 Current Status
