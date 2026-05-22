@@ -34,8 +34,8 @@ I pivoted to a Retrieval-Augmented Generation (RAG) architecture: the LLM answer
 This was a lesson in frugal innovation: technical sophistication must always be balanced with end-user accessibility. A brilliant model that times out on a 3G connection has failed its user.
 Consensus-Verification Logic
 The core challenge: how do you verify ground-truth information about hospital operations without access to a government database?
-The system uses a consensus mechanism. When multiple contributors from different contexts report the same information about a facility — for example, three separate users confirming that Hospital X is processing civil servant claims on a given day  that convergence raises the confidence score of that information. A single unverified report stays flagged as low-confidence until corroborated.
-This is borrowed from distributed systems thinking: you cannot trust any single node, but consensus across independent nodes produces reliable signal. Applied to healthcare information, it means the system gets smarter and more accurate with every contributor — without requiring central administrative control.
+The system uses a consensus mechanism. When multiple contributors from different contexts report the same information about a facility  for example, three separate users confirming that Hospital X is processing civil servant claims on a given day  that convergence raises the confidence score of that information. A single unverified report stays flagged as low-confidence until corroborated.
+This is borrowed from distributed systems thinking: you cannot trust any single node, but consensus across independent nodes produces reliable signal. Applied to healthcare information, it means the system gets smarter and more accurate with every contributor without requiring central administrative control.
 Low-Bandwidth First
 Every design decision was made with a Kenyan patient on a mobile data connection as the primary user. This meant:
 
