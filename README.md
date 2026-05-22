@@ -14,14 +14,14 @@ The same pattern was playing out at scale on social media. When the Linda Mama p
 Administrative friction was being converted directly into clinical risk.
 
 What AfyaSHA Navigator Does
-AfyaSHA Navigator is an AI-powered tool that captures on-the-ground, real-time knowledge from people who actually work inside Kenya's health facilities :the pharmacists, nurses, and administrative staff who know how the system is functioning today — and makes that knowledge accessible to patients before they need emergency care.
+AfyaSHA Navigator is an AI-powered tool that captures on-the-ground, real-time knowledge from people who actually work inside Kenya's health facilities :the pharmacists, nurses, and administrative staff who know how the system is functioning today  and makes that knowledge accessible to patients before they need emergency care.
 A patient can query the system in plain language:
 
 "Is Kenyatta National Hospital processing SHA claims for civil servants today?"
 "What documents do I need for maternity care under SHA at a Level 4 facility?"
 "Which hospitals near Westlands are active for SHA outpatient cover right now?"
 
-The system returns verified, structured guidance — not social media noise.
+The system returns verified, structured guidance .
 
 Architecture & Key Design Decisions
 Why RAG (Retrieval-Augmented Generation) over pure generative AI
@@ -67,5 +67,5 @@ The same information asymmetry that stranded my friend outside a Nairobi hospita
 A pharmacist with clinical credibility, technical capability and lived experience of these systems is well-positioned to build solutions that actually work in the settings they're designed for. That is what this project represents.
 
 Built By
-Brenda Koech — BPharm, USIU-Africa | Pharmacovigilance Associate
+Dr Brenda Koech  BPharm, USIU-Africa | Pharmacovigilance Associate
 Combining clinical pharmacy expertise with self-taught data science and AI development in service of African health systems.
